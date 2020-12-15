@@ -1,11 +1,11 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import "./App.css";
-import {copyToClipboard} from 'react-copy-to-clipboard';
-
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 function App() {
   const [password, setPassword] = useState("password");
   const [range, setRange] = useState(14);
   const [store, setStore] = useState([]);
+  const [copy, setCopy] = useState(false)
 
   const upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const lowerCase = "abcdefghijklmnopqrstuvwxyz";
@@ -16,53 +16,46 @@ function App() {
     setRange(e.target.value);
   }
 
+// const copyPassword = (e)=>{
+
+//  if(true){
+//    console.log('yes');
+//  }else{
+//    setCopy(false)
+//  }
+// }
+
+const isCopied = ()=>{
+  setCopy(true)
+}
+
   function ifCheckUppercase(e) {
     if (e.target.checked) {
       if (store.length < 4) {
         setStore([...store, upperCase]);
-      } else if (store.length > 4) {
-        return
       }
-    } else {
-      return
-    }
-  }
+  }}
 
   function ifCheckLowercase(e) {
     if (e.target.checked) {
       if (store.length < 4) {
         setStore([...store, lowerCase]);
-      } else if (store.length > 4) {
-        return
       }
-    } else {
-      return
-    }
-  }
+  }}
 
   function ifCheckNumber(e) {
     if (e.target.checked) {
       if (store.length < 4) {
         setStore([...store, numbers]);
-      } else if (store.length > 4) {
-        return
       }
-    } else {
-      return
-    }
-  }
+  }}
 
   function ifCheckSymbols(e) {
     if (e.target.checked) {
       if (store.length < 4) {
         setStore([...store, symbols]);
-      } else if (store.length > 4) {
-        return
       }
-    } else {
-     return
-    }
-  }
+  }}
 
   function generatePassword() {
     let genStr = [];
@@ -80,7 +73,7 @@ function App() {
 
 
   return (
-    <>
+
       <div className="container wrapper d-flex justify-content-center p-4">
         <div className="content p-4" id="con">
           <div>
@@ -89,10 +82,14 @@ function App() {
 
           <div className="form-group formDiv p-2 mt-4">
             <div className="d-flex justify-content-center">
-              <p id="password">{password}</p>
+              <p id="password" onClick={(e)=>{console.log(e.target)}}>{copy ? <mark>{password}</mark> : `${password}`}</p>
             </div>
             <div className="d-flex justify-content-end">
+              <CopyToClipboard text={password} 
+              onCopy={() => setCopy(true)}>
               <small style={{ cursor: "pointer" }}>Click to copy</small>
+              </CopyToClipboard>
+              
             </div>
           </div>
 
@@ -115,7 +112,7 @@ function App() {
           <div className="mt-2 formDiv pt-4 p-2 d-flex justify-content-between">
             <p>Include Uppercase</p>
             <label className="switch">
-              <input type="checkbox" unchecked onChange={ifCheckUppercase} />
+              <input type="checkbox" unchecked = "true" onChange={ifCheckUppercase} />
               <span className="slider round"></span>
             </label>
           </div>
@@ -124,7 +121,7 @@ function App() {
             <p>Include Lowercase</p>
 
             <label className="switch">
-              <input type="checkbox" unchecked onChange={ifCheckLowercase} />
+              <input type="checkbox" unchecked = "true" onChange={ifCheckLowercase} />
               <span className="slider round"></span>
             </label>
           </div>
@@ -132,7 +129,7 @@ function App() {
           <div className="mt-2 formDiv pt-3 p-2 d-flex justify-content-between">
             <p>Include Numbers</p>
             <label className="switch">
-              <input type="checkbox" unchecked onChange={ifCheckNumber} />
+              <input type="checkbox" unchecked = "true" onChange={ifCheckNumber} />
               <span className="slider round"></span>
             </label>
           </div>
@@ -141,7 +138,7 @@ function App() {
             <p>Include Symbols</p>
 
             <label className="switch">
-              <input type="checkbox" unchecked onChange={ifCheckSymbols} />
+              <input type="checkbox" unchecked = "true" onChange={ifCheckSymbols} />
               <span className="slider round"></span>
             </label>
           </div>
@@ -154,8 +151,8 @@ function App() {
           </button>
         </div>
       </div>
-    </>
+
   );
 }
 
-export default App;
+export default App
