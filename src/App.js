@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import "./App.css";
 import {CopyToClipboard} from 'react-copy-to-clipboard';
+
 function App() {
   const [password, setPassword] = useState("password");
   const [range, setRange] = useState(14);
-  const [store, setStore] = useState([]);
+  const [store, setStore] = useState({upper : '', lower: '', number: null, symbols: ''});
   const [copy, setCopy] = useState(false)
 
   const upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -12,9 +13,7 @@ function App() {
   const numbers = "0123456789";
   const symbols = "!@#$%^&*()_+{}";
 
-  function getRange(e) {
-    setRange(e.target.value);
-  }
+  
 
 // const copyPassword = (e)=>{
 
@@ -31,39 +30,55 @@ const isCopied = ()=>{
 
   function ifCheckUppercase(e) {
     if (e.target.checked) {
-      if (store.length < 4) {
-        setStore([...store, upperCase]);
-      }
-  }}
+      setStore({...store, upper:upperCase});
+      
+    }else{
+   setStore({...store, upper:''})
+    }
+}
 
-  function ifCheckLowercase(e) {
-    if (e.target.checked) {
-      if (store.length < 4) {
-        setStore([...store, lowerCase]);
-      }
-  }}
 
-  function ifCheckNumber(e) {
-    if (e.target.checked) {
-      if (store.length < 4) {
-        setStore([...store, numbers]);
-      }
-  }}
+let inputStore = []
+inputStore.push(store.upper, store.lower, store.number, store.symbols)
 
-  function ifCheckSymbols(e) {
-    if (e.target.checked) {
-      if (store.length < 4) {
-        setStore([...store, symbols]);
-      }
-  }}
+function getRange(e) {
+  setRange(e.target.value);
+}
+
+
+  const ifCheckLowercase = (e)=>{
+    if (e.target.checked){
+      setStore({...store, lower: lowerCase})
+     }else{
+       setStore({...store, lower:''})
+     }
+}
+
+  const ifCheckNumber = (e)=>{
+    if (e.target.checked){
+      setStore({...store, number: numbers})
+    }else{
+      setStore({...store, number:null})
+    }
+}
+
+  const ifCheckSymbols = (e)=>{
+    if (e.target.checked){
+      setStore({...store, symbols})
+    }else{
+      setStore({...store, symbols:''})
+    }
+}
 
   function generatePassword() {
-    let genStr = [];
-    let allValues = store.join("");
+    let genStr = []
+    let len = inputStore.join('').length;
+    let generalStore = inputStore.join('').split('')
+    //console.log(inputStore.join('').split(''), 'INPUT STORE');
 
     for (let i = 0; i < range; i++) {
-      let rnumber = Math.floor(Math.random() * allValues.length);
-      genStr.push(allValues[rnumber]);
+      let rnumber = Math.floor(Math.random() * len);
+      genStr.push(generalStore[rnumber]);
     }
 
     let joinStr = genStr.join("");
